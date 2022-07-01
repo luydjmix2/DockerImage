@@ -43,4 +43,22 @@ function clear        { echo -n "${e}J"; }      # delete to end of screen
 function cleanbuffer  { echo -n "${e}S"; }      # copies first screen to bottom and clears
                                                 # everything else above the cursor.
 #function xxx { echo -n "${e}xxx"; }
+echo "Selecione la option que desea ejecutar:"
+echo "1: ejecutar contenedor"
+echo "2: instalar contenedor"
+read select
 #cd server && make build
+
+if [[ $select -eq "1" ]];then
+	if [ -e "./ServiceConfg/EnvGlobalContainer/.env" ];
+	then
+	    rm -rf ./ServiceConfg/EnvGlobalContainer/.env
+		cp ./ServiceConfg/EnvGlobalContainer/.env.example ./ServiceConfg/EnvGlobalContainer/.env
+		echo "ok"
+	else
+	    cp ./ServiceConfg/EnvGlobalContainer/.env.example ./ServiceConfg/EnvGlobalContainer/.env
+		echo "nok"
+	fi
+	./ServiceConfg/EnvGlobalContainer/MysqlPass.sh
+fi
+read -p "$(echo -e $(red)$(bg_yellow)"Press any key to continue..."$(normal))"
