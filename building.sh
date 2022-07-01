@@ -43,4 +43,4 @@ function clear        { echo -n "${e}J"; }      # delete to end of screen
 function cleanbuffer  { echo -n "${e}S"; }      # copies first screen to bottom and clears
                                                 # everything else above the cursor.
 #function xxx { echo -n "${e}xxx"; }
-cd server && make build
+#cd server && make build
