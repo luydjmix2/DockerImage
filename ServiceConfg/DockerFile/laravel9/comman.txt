@@ -1,0 +1,4 @@
+# create image in docker
+docker build -t laravel9:0.1 .
+# create contain
+docker run -d -it --name CrawlerDjango -p 8010:8010 -v D:/DockerConten/Sevice/python/crawlerpy:/crawlerpy laravel9:0.1
