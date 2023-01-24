@@ -1,0 +1,55 @@
+version: "3.4"
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:alpine
+    container_name: nginx-proxy
+    restart: always
+    expose:
+      - 80
+      - 443
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DEFAULT_EMAIL: ing.luiszuniga@dvloper.com.co
+      DHPARAM_GENERATION: 0
+    volumes:
+      - ./Logs/:/var/log/nginx:rw
+      - certs:/etc/nginx/certs:ro
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - reverse-proxy
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    restart: always
+    environment:
+      ACME_CA_URI: "https://acme.zerossl.com/v2/DV90"
+      ACME_EAB_KID: "Sjfr284CRtCg77ucpLZBjA"
+      ACME_EAB_HMAC_KEY: "SXRS7h0GuD0WGmVSoq6TydUVUvQp9J5wiITINajfYHebkcHW8pz7juuRN6zT5VMqdCHcDZDOOIVleOJVYngxtw"
+      ZEROSSL_API_KEY: "4098e0e0a06cbb443c61a7e53596041f"
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - nginx-proxy
+    networks:
+      - reverse-proxy
+volumes:
+  certs:
+    name: certs
+    external: false
+  vhost:
+    name: vhost
+    external: false
+  html:
+    name: html
+    external: false
+  acme:
+    name: acme
+    external: false
+networks:
+  reverse-proxy:

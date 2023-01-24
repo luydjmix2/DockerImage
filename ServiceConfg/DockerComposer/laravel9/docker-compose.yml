@@ -1,0 +1,48 @@
+version: "3.3"
+
+services:  
+  php:
+    build:
+      context: ../..
+      dockerfile: DockerFile/laravel9/Dockerfile
+    container_name: laravel9
+    working_dir: /var/www/html/laravel9/promogsk
+    expose:
+      - 8010
+    ports:
+      - 8010:8000
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    volumes:
+      - ../../../Sevice/www/laravel9/test:/var/www/html/laravel9/test
+    networks:
+      - serv-test-wt
+      - mysql_network-mysql
+
+  mysql:
+    image: mysql:5.7.36
+    container_name: mysqllaravel9
+    restart: unless-stopped
+    tty: true
+    expose:
+      - 3307
+    ports:
+      - 3307:3306
+    volumes:
+      - ../../../Sevice/mysql/laravel9:/var/lib/mysql:delegated
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=291022test
+      - MYSQL_ROOT_USER=root
+      - MYSQL_PASSWORD=123456789
+      - MYSQL_ROOT_PASSWORD=123456789
+      - SERVICE_TAGS=dev
+      - SERVICE_NAME=mysql
+    networks:
+      - serv-test-wt
+      - mysql_network-mysql
+
+networks:
+  serv-test-wt:
+    driver: bridge
+  mysql_network-mysql:
+    external: true

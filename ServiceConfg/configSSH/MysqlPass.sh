@@ -9,6 +9,8 @@ passGenerator(){
 echo "### MySQL Password Generator ###"
 echo "### $(passGenerator) ###"
 # shellcheck disable=SC2028
-printf '%s\n'>> $FILENAME
-echo 'MYSQL_PASSWORD="'$(passGenerator)'"' >> $FILENAME
+#printf '%s\n'>> $FILENAME
+#echo 'MYSQL_PASSWORD="'$(passGenerator)'"' >> $FILENAME
 #read -p "Press any key to continue..."
+
+echo 'MYSQL_PASSWORD="'$(passGenerator)'"'
