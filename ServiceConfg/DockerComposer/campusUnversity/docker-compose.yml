@@ -1,0 +1,48 @@
+version: "3.3"
+
+services:  
+  php:
+    build:
+      context: ../..
+      dockerfile: DockerFile/laravel9/Dockerfile
+    container_name: CampusUnversity
+    working_dir: /var/www/html/campusUnversity
+    expose:
+      - 8002
+    ports:
+      - 8002:8000
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    volumes:
+      - ../../../Service/www/campusUnversity:/var/www/html/campusUnversity
+    networks:
+      - serv-test-wt
+      - mysql_network-mysql
+
+  mysql:
+    image: mysql:5.7.36
+    container_name: mysqlCampusUnversity
+    restart: unless-stopped
+    tty: true
+    expose:
+      - 3302
+    ports:
+      - 3302:3306
+    volumes:
+      - ../../../Service/mysql/campusUnversity:/var/lib/mysql:delegated
+    environment:
+      - MYSQL_DATABASE=CampusUnversity
+      - MYSQL_USER=291022CampusUnversity
+      - MYSQL_ROOT_USER=root
+      - MYSQL_PASSWORD=123456789
+      - MYSQL_ROOT_PASSWORD=123456789
+      - SERVICE_TAGS=dev
+      - SERVICE_NAME=mysql
+    networks:
+      - serv-test-wt
+      - mysql_network-mysql
+
+networks:
+  serv-test-wt:
+    driver: bridge
+  mysql_network-mysql:
+    external: true
