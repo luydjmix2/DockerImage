@@ -1,0 +1,48 @@
+version: "3.3"
+
+services:  
+  php:
+    build:
+      context: ../..
+      dockerfile: DockerFile/laravel7/Dockerfile
+    container_name: laravel7HondaMotos
+    working_dir: /var/www/html/laravel7/HondaMotos
+    expose:
+      - 8015
+    ports:
+      - 8015:8000
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    volumes:
+      - ../../../Sevice/www/laravel7/HondaMotos:/var/www/html/laravel7/HondaMotos
+    networks:
+      - serv-test-wt
+      - mysql_network-mysql
+
+  mysql:
+    image: mysql:5.7.36
+    container_name: mysqllaravel7HondaMotos
+    restart: unless-stopped
+    tty: true
+    expose:
+      - 3315
+    ports:
+      - 3315:3306
+    volumes:
+      - ../../../Sevice/mysql/laravel7/HondaMotos:/var/lib/mysql:delegated
+    environment:
+      - MYSQL_DATABASE=laravel7HondaMotos
+      - MYSQL_USER=291022test
+      - MYSQL_ROOT_USER=root
+      - MYSQL_PASSWORD=123456789
+      - MYSQL_ROOT_PASSWORD=123456789
+      - SERVICE_TAGS=dev
+      - SERVICE_NAME=mysql
+    networks:
+      - serv-test-wt
+      - mysql_network-mysql
+
+networks:
+  serv-test-wt:
+    driver: bridge
+  mysql_network-mysql:
+    external: true
