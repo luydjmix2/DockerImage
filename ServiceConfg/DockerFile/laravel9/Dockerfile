@@ -30,6 +30,8 @@ RUN apt-get -y install nodejs npm
 
 RUN apt-get -y install node
 
+RUN apt-get -y install nano
+
 RUN composer global require laravel/installer
 
 #COPY ../../../Sevice/www/laravel9 /var/www/html/laravel9
